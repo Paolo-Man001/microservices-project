@@ -1,6 +1,6 @@
-package com.paolomanlunas.photoappapiuserservice.users.ui.controllers;
+package com.paolomanlunas.photoappapiusers.ui.controllers;
 
-import com.paolomanlunas.photoappapiuserservice.users.ui.model.CreateUserRequestModel;
+import com.paolomanlunas.photoappapiusers.ui.model.CreateUserRequestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;

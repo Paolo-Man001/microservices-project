@@ -1,4 +1,4 @@
-package com.paolomanlunas.photoappapiuserservice;
+package com.paolomanlunas.photoappapiusers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
