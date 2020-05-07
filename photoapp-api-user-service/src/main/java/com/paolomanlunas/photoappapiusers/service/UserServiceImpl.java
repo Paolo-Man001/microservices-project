@@ -26,12 +26,11 @@ public class UserServiceImpl implements UserService {
 
       // set a Unique UUID
       userDetails.setUserId(UUID.randomUUID().toString());
-
       // ModelMapper to map data to ModelDTO then copy to ModelEntity
       ModelMapper modelMapper = new ModelMapper();
       modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);   // ModelMapper MUST match the properties/fields in the destination-object(UserEntity)
-      UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);          // map Data then copy into UserEntity-variable
 
+      UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);          // map Data then copy into UserEntity-variable
       /* TEMPORARY PASSWORD:
       *     Encrypted Password is Temporary
       * */
