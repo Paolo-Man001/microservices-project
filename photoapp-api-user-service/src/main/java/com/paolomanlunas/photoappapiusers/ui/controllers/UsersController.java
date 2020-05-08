@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,15 +33,19 @@ public class UsersController {
       return "Users API Service is Working on PORT: " + env.getProperty("local.server.port");
    }
 
+   /**   ResponseEntity - allows us to return HttpStatusCode.
+    *    Http Code is better to indicate success,fail, etc.. for POST req.
+    *    instead of String of text.
+    * */
    @PostMapping()
-   public String createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
-
+   public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
       ModelMapper modelMapper = new ModelMapper();
       modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
       UserDTO userDTO = modelMapper.map(userDetails, UserDTO.class);
       userService.createUser(userDTO);
 
-      return "Create user method is called.";
+      // CREATED is Code 201 - means a te Http Request is Successful and a Resource has been Created.
+      return new ResponseEntity(HttpStatus.CREATED);
    }
 }
