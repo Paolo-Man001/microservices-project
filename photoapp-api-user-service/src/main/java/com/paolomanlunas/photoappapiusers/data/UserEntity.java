@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "users")
+@Table(name = "users")  // 'users' indicates error since we are not using datasource - only h2 (for now)
 public class UserEntity implements Serializable {
    private static final long serialVersionUID = -8056457250635842509L;
 
