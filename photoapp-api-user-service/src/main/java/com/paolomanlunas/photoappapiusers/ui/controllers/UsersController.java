@@ -3,6 +3,7 @@ package com.paolomanlunas.photoappapiusers.ui.controllers;
 import com.paolomanlunas.photoappapiusers.service.UserServiceImpl;
 import com.paolomanlunas.photoappapiusers.shared.UserDTO;
 import com.paolomanlunas.photoappapiusers.ui.model.CreateUserRequestModel;
+import com.paolomanlunas.photoappapiusers.ui.model.CreateUserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +39,16 @@ public class UsersController {
     *    instead of String of text.
     * */
    @PostMapping()
-   public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
+   public ResponseEntity<CreateUserResponseModel> createUser(@Valid @RequestBody CreateUserRequestModel userDetails) {
       ModelMapper modelMapper = new ModelMapper();
       modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
       UserDTO userDTO = modelMapper.map(userDetails, UserDTO.class);
-      userService.createUser(userDTO);
+      UserDTO createdUser = userService.createUser(userDTO);            // this will be mapped to the CreateUserResponseModel
 
+      // Response-body is TypeOf-CreateUserResponseModel: which will be the return-object-type
+      CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
       // CREATED is Code 201 - means a te Http Request is Successful and a Resource has been Created.
-      return new ResponseEntity(HttpStatus.CREATED);
+      return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
    }
 }
