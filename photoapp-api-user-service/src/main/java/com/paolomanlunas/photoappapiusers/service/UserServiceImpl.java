@@ -6,6 +6,7 @@ import com.paolomanlunas.photoappapiusers.shared.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -15,26 +16,24 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
    UsersRepository usersRepository;
+   BCryptPasswordEncoder bCryptPasswordEncoder;
 
    @Autowired
-   public UserServiceImpl(UsersRepository usersRepository) {
+   public UserServiceImpl(UsersRepository usersRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
       this.usersRepository = usersRepository;
+      this.bCryptPasswordEncoder = bCryptPasswordEncoder;
    }
 
    @Override
    public UserDTO createUser(UserDTO userDetails) {
 
-      // set a Unique UUID
-      userDetails.setUserId(UUID.randomUUID().toString());
-      // ModelMapper to map data to ModelDTO then copy to ModelEntity
-      ModelMapper modelMapper = new ModelMapper();
+      userDetails.setUserId(UUID.randomUUID().toString());     // set a Unique UUID
+      userDetails.setEncryptedPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
+
+      ModelMapper modelMapper = new ModelMapper();    // ModelMapper to map data to ModelDTO then copy to ModelEntity
       modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);   // ModelMapper MUST match the properties/fields in the destination-object(UserEntity)
 
       UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);          // map Data then copy into UserEntity-variable
-      /* TEMPORARY PASSWORD:
-      *     Encrypted Password is Temporary
-      * */
-      userEntity.setEncryptedPassword("test");
 
       usersRepository.save(userEntity);   // save() method will take the Entity to persist into DB
 

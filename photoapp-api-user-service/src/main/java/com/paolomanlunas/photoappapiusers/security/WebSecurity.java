@@ -13,12 +13,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
    @Override
    protected void configure(HttpSecurity http) throws Exception {
-      http
-              .csrf().disable();
+      http.csrf().disable();
       http
               .authorizeRequests()
               .antMatchers("/users/**")
               .permitAll();
 
+      // Whiteframe - Disable to avoid whiteframe when connecting to h2-console
+      http.headers().frameOptions().disable();
    }
 }
